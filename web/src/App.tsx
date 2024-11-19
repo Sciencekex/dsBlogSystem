@@ -1,4 +1,4 @@
-// 根组件
+
 
 import { RouterProvider } from "react-router-dom";
 import router from "@/router";
@@ -22,7 +22,7 @@ function App() {
         <>
             <ThemeContext.Provider value={{ toggleTheme: siteStore?.toggleTheme, isDarkMode: siteStore?.isDarkMode }}>
                 <ThemeProvider theme={theme}>
-                    <CssBaseline /> {/* 确保 MUI 的样式全局生效 */}
+                    <CssBaseline /> {}
                     <RouterProvider router={router} fallbackElement={<Skeleton sx={{ bgcolor: "grey.900" }}
                                                                                variant="rectangular"
                                                                                width={210}

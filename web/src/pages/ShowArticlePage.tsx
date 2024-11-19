@@ -1,4 +1,4 @@
-// 显示文章的界面. 包含文章的显示区, 和评论区.
+
 
 import { useParams } from "react-router-dom";
 import { Suspense, useEffect, useState } from "react";
@@ -31,7 +31,7 @@ export default function ShowArticlePage() {
             maxWidth="lg"
             sx={{
                 py: 4,
-                px: { xs: 2, md: 4 }, // 响应式内边距
+                px: { xs: 2, md: 4 },
                 minHeight: "100vh",
                 display: "flex",
                 flexDirection: "column",
@@ -49,7 +49,7 @@ export default function ShowArticlePage() {
                 }}
             >
                 <Grid container spacing={4}>
-                    {/* 文章内容区域 */}
+                    {}
                     <Grid item xs={12} md={8}>
                         <Suspense fallback={<LoadingSkeleton />}>
                             {content ? (
@@ -125,7 +125,7 @@ export default function ShowArticlePage() {
                         </Suspense>
                     </Grid>
 
-                    {/* 评论区域 */}
+                    {}
                     <Grid item xs={12} md={4}>
                         <Box sx={{
                             height: "100%",
@@ -134,7 +134,7 @@ export default function ShowArticlePage() {
                         }}>
                             <Box sx={{
                                 flex: 1,
-                                maxHeight: "800px",  // 设置最大高度
+                                maxHeight: "800px",
                                 overflowY: "auto",
                                 "&::-webkit-scrollbar": {
                                     width: "8px",

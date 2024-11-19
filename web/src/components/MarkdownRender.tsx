@@ -1,15 +1,14 @@
-// markdown渲染器组件
+
 
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import { Typography, Link, Box, Paper } from '@mui/material';
 
-// 定义 Markdown 渲染器组件
 const MarkdownRenderer = ({ markdown }: { markdown: any}) => {
     return (
         <Paper sx={{ p: 2 }}>
             <ReactMarkdown
-                // 启用 GitHub 风格的 Markdown 支持
+
                 remarkPlugins={[remarkGfm]}
                 components={{
                     h1: ({ children }) => (

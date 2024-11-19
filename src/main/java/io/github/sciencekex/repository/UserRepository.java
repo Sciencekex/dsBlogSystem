@@ -9,23 +9,23 @@ import jakarta.persistence.PersistenceException;
 
 import java.util.List;
 
-@ApplicationScoped  // 声明这是一个应用范围的 Bean，需要的地方可以使用 @Inject 注入
+@ApplicationScoped
 public class UserRepository {
 
     public List<User> findAll() throws PersistenceException {
         EntityManager em = HibernateUtil.getEntityManager();
         List<User> users = null;
         try {
-            em.getTransaction().begin();  // 开始事务
+            em.getTransaction().begin();
             users = em
                     .createQuery("SELECT u FROM User u", User.class)
-                    .getResultList();  // 查询所有用户
-            em.getTransaction().commit();  // 提交事务
+                    .getResultList();
+            em.getTransaction().commit();
         } catch (PersistenceException e) {
-            em.getTransaction().rollback();  // 当出了异常时回滚事务
+            em.getTransaction().rollback();
             throw new RuntimeException("", e);
         } finally {
-            em.close();  // 关闭 EntityManager
+            em.close();
         }
         return users;
     }
@@ -35,17 +35,17 @@ public class UserRepository {
         EntityManager em = HibernateUtil.getEntityManager();
         User user = null;
         try {
-            em.getTransaction().begin();  // 开始事务
+            em.getTransaction().begin();
             user = em
                     .createQuery("SELECT u FROM User u WHERE u.id = :id", User.class)
                     .setParameter("id", id)
-                    .getSingleResult();  // 查询指定 ID 的用户
-            em.getTransaction().commit();  // 提交事务
+                    .getSingleResult();
+            em.getTransaction().commit();
         } catch (PersistenceException e) {
-            em.getTransaction().rollback();  // 当出了异常时回滚事务
+            em.getTransaction().rollback();
             throw new RuntimeException("user_not_found", e);
         } finally {
-            em.close();  // 关闭 EntityManager
+            em.close();
         }
         return user;
     }
@@ -54,17 +54,17 @@ public class UserRepository {
         EntityManager em = HibernateUtil.getEntityManager();
         User user = null;
         try {
-            em.getTransaction().begin();  // 开始事务
+            em.getTransaction().begin();
             user = em
                     .createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                     .setParameter("username", username)
-                    .getSingleResult();  // 查询指定 username 的用户
+                    .getSingleResult();
             em.getTransaction().commit();
         } catch (PersistenceException e) {
-            em.getTransaction().rollback();  // 当出了异常时回滚事务
+            em.getTransaction().rollback();
             throw new RuntimeException("user_not_found", e);
         } finally {
-            em.close();  // 关闭 EntityManager
+            em.close();
         }
         return user;
     }
@@ -72,14 +72,14 @@ public class UserRepository {
     public void create(User user) throws PersistenceException {
         EntityManager em = HibernateUtil.getEntityManager();
         try {
-            em.getTransaction().begin();  // 开始事务
-            em.persist(user);  // 保存用户
-            em.getTransaction().commit();  // 提交事务
+            em.getTransaction().begin();
+            em.persist(user);
+            em.getTransaction().commit();
         } catch (PersistenceException e) {
-            em.getTransaction().rollback();  // 当出了异常时回滚事务
+            em.getTransaction().rollback();
             throw new RuntimeException("user_already_exists", e);
         } finally {
-            em.close();  // 关闭 EntityManager
+            em.close();
         }
     }
 }

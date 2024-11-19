@@ -1,4 +1,4 @@
-// 持久化存储用户的登录状态, 如果登录, 就设置 token. token可以用于后续的一系列操作, 例如获取文章, 获取评论, 新建文章等等.
+
 
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";

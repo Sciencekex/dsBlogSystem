@@ -1,4 +1,4 @@
-// 导航条组件
+
 
 import {
     AppBar, Avatar, Box,
@@ -33,7 +33,7 @@ export default function NavigationBar() {
             <AppBar
                 position="sticky"
                 sx={{
-                    backgroundColor: isDarkMode ? "#333" : "#1976d2", // 适配明暗模式
+                    backgroundColor: isDarkMode ? "#333" : "#1976d2",
                     boxShadow: "none",
                     borderBottom: isDarkMode ? "2px solid #555" : "2px solid #1565c0",
                 }}
@@ -44,7 +44,7 @@ export default function NavigationBar() {
                         paddingX: 2,
                     }}
                 >
-                    {/* 首页按钮 */}
+                    {}
                     <Box sx={{
                         display: "flex",
                         justifyContent: "start",
@@ -64,7 +64,7 @@ export default function NavigationBar() {
                         </IconButton>
                     </Box>
 
-                    {/* 文章标题 */}
+                    {}
                     <Typography
                         variant="h4"
                         color="inherit"
@@ -82,14 +82,14 @@ export default function NavigationBar() {
                         justifyContent: "end",
                         flex: 1,
                     }}>
-                        {/* 明暗模式切换按钮 */}
+                        {}
                         <Tooltip title="切换明暗色主题">
                             <IconButton onClick={toggleTheme} color="inherit">
                                 {isDarkMode ? <Brightness7 /> : <Brightness4 />}
                             </IconButton>
                         </Tooltip>
 
-                        {/* 用户操作区 */}
+                        {}
                         {token ? (
                             <>
                                 <Tooltip title="信息">

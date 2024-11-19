@@ -1,11 +1,11 @@
-// 路由的配置文件.
-// writeArticlePage , homePage,  showArticlePage 组件都添加了路由守卫, 防止退出登录后撤回到之前账号的显示和写的界面.
+
+
 import { createBrowserRouter, RouteObject } from "react-router-dom";
 import ShowArticlePage from "@/pages/ShowArticlePage.tsx";
 
 const routes: RouteObject[] = [
     {
-        // 根路由是 layout 保证布局永远被用到.
+
         path: "/",
         lazy: async () => {
             const Layout = await import("@/layouts");

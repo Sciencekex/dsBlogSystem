@@ -1,4 +1,4 @@
-// 当访问了不存在的路由, 就跳转到这个界面.
+
 
 import { Typography, Button, Box } from "@mui/material";
 import { useNavigate } from "react-router-dom";
@@ -9,13 +9,13 @@ export default function NotFoundPage() {
     return (
         <Box
             sx={{
-                height: "100vh", // 占满视口高度
+                height: "100vh",
                 display: "flex",
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                bgcolor:   "grey.100", // 动态背景
-                color:  "text.secondary", // 动态文本颜色
+                bgcolor:   "grey.100",
+                color:  "text.secondary",
                 textAlign: "center",
                 padding: 4,
             }}

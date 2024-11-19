@@ -1,4 +1,4 @@
-// 文章的编辑界面. 如果不是作者本人, 无法编辑.
+
 
 import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -36,7 +36,7 @@ export default function EditArticlePage() {
         <Container maxWidth="md">
             <Paper elevation={3} sx={{ padding: 4, marginTop: 4, marginBottom: 4 }}>
                 <Stack spacing={4}>
-                    {/* 标题区块 */}
+                    {}
                     <Typography
                         variant="h4"
                         align="center"
@@ -50,7 +50,7 @@ export default function EditArticlePage() {
                         修改文章
                     </Typography>
 
-                    {/* 表单区块 */}
+                    {}
                     <Stack spacing={3}>
                         <TextField
                             label="标题"
@@ -82,7 +82,7 @@ export default function EditArticlePage() {
                         />
                     </Stack>
 
-                    {/* 按钮区块 */}
+                    {}
                     <Button
                         variant="contained"
                         size="large"

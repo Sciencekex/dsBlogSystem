@@ -12,7 +12,7 @@ public class HibernateListener implements ServletContextListener {
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         try {
-            HibernateUtil.init();   // 创建 EntityManagerFactory，即使得 Hibernate 可以管理实体类并创建数据库连接。若失败，则关闭服务器。
+            HibernateUtil.init();
         } catch (PersistenceException ex) {
             System.err.println("Database connection failed. Server will shut down.");
             shutdownServer();

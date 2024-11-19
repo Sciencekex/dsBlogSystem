@@ -1,4 +1,4 @@
-// 主界面.显示所有文章的列表, 可以跳转到 ShowArticlePage.tsx 以显示对应的文章内容. 也可以跳转到登陆或者注册界面.
+
 
 import { useEffect, useState } from "react";
 import {
@@ -46,7 +46,7 @@ export default function HomePage() {
 
     return (
         <Container maxWidth="md" sx={{ py: 4 }}>
-            {/* 页面标题和新建按钮 */}
+            {}
             <Stack
                 direction="row"
                 justifyContent="space-between"
@@ -84,7 +84,7 @@ export default function HomePage() {
                 )}
             </Stack>
 
-            {/* 文章列表 */}
+            {}
             <Paper elevation={2} sx={{ borderRadius: 2 }}>
                 {!articles?.length ? (
                     <Box sx={{ p: 4, textAlign: "center" }}>
