@@ -14,6 +14,7 @@ import jakarta.ws.rs.core.Response;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Path("/users")
 public class UserHandler {
@@ -21,6 +22,15 @@ public class UserHandler {
     @Inject
     private UserRepository userRepository;
 
+    //->:创建一个用于传输的用户DTO，不包含密码
+    private Map<String, Object> sanitizeUser(User user) {
+        Map<String, Object> sanitizedUser = new HashMap<>();
+        sanitizedUser.put("id", user.getId());
+        sanitizedUser.put("username", user.getUsername());
+        sanitizedUser.put("nickname", user.getNickname());
+        sanitizedUser.put("role", user.getRole());
+        return sanitizedUser;
+    }
 
     @GET
     @Path("/")
@@ -28,25 +38,33 @@ public class UserHandler {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAllUsers() {
         List<User> users = userRepository.findAll();
+        //->:转换用户列表，移除密码信息
+        List<Map<String, Object>> sanitizedUsers = users.stream()
+            .map(this::sanitizeUser)
+            .collect(Collectors.toList());
+
         Map<String, Object> res = new HashMap<>();
         res.put("code", Response.Status.OK);
-        res.put("data", users);
+        res.put("data", sanitizedUsers);
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
     @GET
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public User getUserById(@PathParam("id") int id /* 从路由的 {id} 中获得 id */) {
-        return userRepository.findByID(id);
+    public Response getUserById(@PathParam("id") int id) {
+        User user = userRepository.findByID(id);
+        if (user == null) {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+        return Response.ok(sanitizeUser(user)).build();
     }
 
     @POST
     @Path("/login")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response login(UserLoginRequest request ) {
-
+    public Response login(UserLoginRequest request) {
         User user = userRepository.findByUsername(request.getUsername());
         if (user == null) {
             Map<String, Object> res = new HashMap<>();
@@ -63,7 +81,7 @@ public class UserHandler {
         Map<String, Object> res = new HashMap<>();
         res.put("code", Response.Status.OK);
         res.put("token", token);
-        res.put("data", user);
+        res.put("data", sanitizeUser(user));  //->:使用净化后的用户数据
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
@@ -71,7 +89,7 @@ public class UserHandler {
     @Path("/register")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response register(User user ) {
+    public Response register(User user) {
         user.setRole("user");
         List<User> users = userRepository.findAll();
         if (users.isEmpty()) {

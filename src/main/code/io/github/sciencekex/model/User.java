@@ -1,5 +1,6 @@
 package io.github.sciencekex.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -20,10 +21,11 @@ public class User implements Serializable {
     @Column(name = "nickname")
     private String nickname;
 
+//    @JsonIgnore
     @Column(name = "password")
     private String password;
 
     @Column(name = "role")
-    private String role = "user";
+    public String role = "user";
 
 }
