@@ -1,13 +1,12 @@
-package io.github.sciencekex.handler;
+package io.github.sciencekex.handler
 
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
+import jakarta.ws.rs.GET
+import jakarta.ws.rs.Path
 
 @Path("/")
-public class IndexHandler {
-
+class IndexHandler {
     @GET
-    public String index() {
-        return "Hello World!";
+    fun index(): String {
+        return "Hello World!"
     }
 }

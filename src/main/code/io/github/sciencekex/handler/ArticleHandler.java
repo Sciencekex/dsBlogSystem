@@ -17,76 +17,44 @@ import jakarta.ws.rs.core.SecurityContext;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-@Path("/articles")
+@Path("/articles")  // /api/articles/*
 public class ArticleHandler {
 
-    @Inject
+    @Inject  // 要求注入一个 ArticleRepository 实例
     private ArticleRepository articleRepository;
 
-    @Inject
+    @Inject  // 要求注入一个 CommentRepository 实例
     private CommentRepository commentRepository;
 
-    @Inject
+    @Inject  // 要求注入一个 UserRepository 实例
     private UserRepository userRepository;
 
-    //->:重用之前的sanitizeUser方法
-    private Map<String, Object> sanitizeUser(User user) {
-        Map<String, Object> sanitizedUser = new HashMap<>();
-        sanitizedUser.put("id", user.getId());
-        sanitizedUser.put("username", user.getUsername());
-        sanitizedUser.put("nickname", user.getNickname());
-        sanitizedUser.put("role", user.getRole());
-        return sanitizedUser;
-    }
-
-    //->:创建一个处理文章的方法，确保作者信息被净化
-    private Map<String, Object> sanitizeArticle(Article article) {
-        Map<String, Object> sanitizedArticle = new HashMap<>();
-        sanitizedArticle.put("id", article.getId());
-        sanitizedArticle.put("title", article.getTitle());
-        sanitizedArticle.put("content", article.getContent());
-        sanitizedArticle.put("author", sanitizeUser(article.getAuthor()));
-        sanitizedArticle.put("author_id", article.getAuthorId());
-        sanitizedArticle.put("created_at", article.getCreatedAt());
-        return sanitizedArticle;
-    }
-
-    @GET
-    @Path("/")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET  // 指定 HTTP GET 请求
+    @Path("/")  // /api/articles
+    @Produces(MediaType.APPLICATION_JSON)  // 指定返回的数据类型是 JSON
     public Response getAllArticles() {
         List<Article> articles = articleRepository.findAll();
-        //->:处理文章列表，移除密码信息
-        List<Map<String, Object>> sanitizedArticles = articles.stream()
-            .map(this::sanitizeArticle)
-            .collect(Collectors.toList());
-        
-        Map<String, Object> res = new HashMap<>();
+        Map<String, Object> res= new HashMap<>();
         res.put("code", Response.Status.OK);
-        res.put("data", sanitizedArticles);
+        res.put("data", articles);
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
-    @GET
-    @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET  // 指定 HTTP GET 请求
+    @Path("/{id}")  // /api/articles/{id}
+    @Produces(MediaType.APPLICATION_JSON)  // 返回 JSON 格式的数据
     public Response getArticleById(@PathParam("id") Integer id) {
         Article article = articleRepository.findByID(id);
-        if (article == null) {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
-        
         Map<String, Object> res = new HashMap<>();
         res.put("code", Response.Status.OK);
-        res.put("data", sanitizeArticle(article));
+        res.put("data", article);
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
-    @GET
-    @Path("/{id}/comments")
-    @Produces(MediaType.APPLICATION_JSON)
+    @GET  // 指定 HTTP GET 请求
+    @Path("/{id}/comments")  // /api/articles/{id}/comments
+    @Produces(MediaType.APPLICATION_JSON)  // 返回 JSON 格式的数据
     public Response getComments(@PathParam("id") Integer id) {
         List<Comment> comments = commentRepository.findByArticleId(id);
         Map<String, Object> res = new HashMap<>();
@@ -95,29 +63,29 @@ public class ArticleHandler {
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
-    @POST
-    @Path("/")
-    @Secured({"admin"})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response createArticle(Article article, @Context SecurityContext securityContext) {
-        User author = userRepository.findByID(Integer.valueOf(securityContext.getUserPrincipal().getName()));
-        article.setAuthor(author);
-        article.setCreatedAt(System.currentTimeMillis() / 1000);
-        articleRepository.create(article);
+    @POST  // 指定 HTTP POST 请求
+    @Path("/")  // /api/articles
+    @Secured({"admin"})  // 限制只有真正的 admin 才可访问这个接口，毕竟只有管理员才能在自己的博客上发文章
+    @Consumes(MediaType.APPLICATION_JSON)  // 接收 JSON 格式的数据
+    @Produces(MediaType.APPLICATION_JSON)  // 返回 JSON 格式的数据
+    public Response createArticle(Article article /* 接收的 JSON 实际上需要是一个 Article 的模型 */, @Context SecurityContext securityContext /* 从请求上下文中获得在 AuthenticationFilter 中的 SecurityContext */) {
+        User author = userRepository.findByID(Integer.valueOf(securityContext.getUserPrincipal().getName()));  // 从 SecurityContext 中获得当前登录的用户
+        article.setAuthor(author);  // 设置文章的作者
+        article.setCreatedAt(System.currentTimeMillis() / 1000);  // 设置文章的创建时间
+        articleRepository.create(article);  // 创建文章
         Map<String, Object> res = new HashMap<>();
         res.put("code", Response.Status.OK);
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
-    @PUT
-    @Path("/")
-    @Secured({"admin"})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateArticle(Article article, @Context SecurityContext securityContext) {
-        article.setAuthorId(Integer.valueOf(securityContext.getUserPrincipal().getName()));
-        articleRepository.update(article);
+    @PUT  // 指定 HTTP PUT 请求
+    @Path("/")  // /api/articles
+    @Secured({"admin"})  // 限制只有真正的 admin 才可访问这个接口，毕竟只有管理员才能在自己的博客上更新文章
+    @Consumes(MediaType.APPLICATION_JSON)  // 接收 JSON 格式的数据
+    @Produces(MediaType.APPLICATION_JSON)  // 返回 JSON 格式的数据
+    public Response updateArticle(Article article /* 接收的 JSON 实际上需要是一个 Article 的模型 */, @Context SecurityContext securityContext /* 从请求上下文中获得在 AuthenticationFilter 中的 SecurityContext */) {
+        article.setAuthorId(Integer.valueOf(securityContext.getUserPrincipal().getName()));  // 设置文章的作者
+        articleRepository.update(article);  // 更新文章
         Map<String, Object> res = new HashMap<>();
         res.put("code", Response.Status.OK);
         return Response.status(Response.Status.OK).entity(res).build();

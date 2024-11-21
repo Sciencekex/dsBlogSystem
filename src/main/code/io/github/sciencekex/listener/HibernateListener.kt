@@ -1,32 +1,29 @@
-package io.github.sciencekex.listener;
+package io.github.sciencekex.listener
 
-import io.github.sciencekex.util.HibernateUtil;
-import jakarta.servlet.ServletContextEvent;
-import jakarta.servlet.ServletContextListener;
-import jakarta.servlet.annotation.WebListener;
-import jakarta.persistence.PersistenceException;
+import io.github.sciencekex.util.HibernateUtil
+import jakarta.persistence.PersistenceException
+import jakarta.servlet.ServletContextEvent
+import jakarta.servlet.ServletContextListener
+import jakarta.servlet.annotation.WebListener
 
 @WebListener
-public class HibernateListener implements ServletContextListener {
-
-    @Override
-    public void contextInitialized(ServletContextEvent sce) {
+class HibernateListener : ServletContextListener {
+    override fun contextInitialized(sce: ServletContextEvent?) {
         try {
-            HibernateUtil.init();
-        } catch (PersistenceException ex) {
-            System.err.println("Database connection failed. Server will shut down.");
-            shutdownServer();
+            HibernateUtil.init()
+        } catch (ex: PersistenceException) {
+            System.err.println("Database connection failed. Server will shut down.")
+            shutdownServer()
         }
     }
 
-    @Override
-    public void contextDestroyed(ServletContextEvent sce) {
+    override fun contextDestroyed(sce: ServletContextEvent?) {
         if (HibernateUtil.getEntityManagerFactory() != null && HibernateUtil.getEntityManagerFactory().isOpen()) {
-            HibernateUtil.getEntityManagerFactory().close();
+            HibernateUtil.getEntityManagerFactory().close()
         }
     }
 
-    private void shutdownServer() {
-        System.exit(1);
+    private fun shutdownServer() {
+        System.exit(1)
     }
 }

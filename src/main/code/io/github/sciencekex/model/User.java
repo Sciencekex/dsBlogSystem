@@ -21,7 +21,7 @@ public class User implements Serializable {
     @Column(name = "nickname")
     private String nickname;
 
-//    @JsonIgnore
+    @JsonIgnore
     @Column(name = "password")
     private String password;
 
