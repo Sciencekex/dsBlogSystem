@@ -1,37 +1,38 @@
-package io.github.sciencekex.util;
+package io.github.sciencekex.util
 
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
+import jakarta.persistence.EntityManager
+import jakarta.persistence.EntityManagerFactory
+import jakarta.persistence.Persistence
 
-import java.lang.reflect.Field;
-
-public class HibernateUtil {
-    private static EntityManagerFactory emf;
+object HibernateUtil {
+    private var emf: EntityManagerFactory? = null
 
 
-    public static void init() {
-        emf = Persistence.createEntityManagerFactory("default");
+    fun init() {
+        emf = Persistence.createEntityManagerFactory("default")
     }
 
 
-    public static void copyNonNullProperties(Object source, Object target) throws IllegalAccessException {
-        Field[] fields = source.getClass().getDeclaredFields();
-        for (Field field : fields) {
-            field.setAccessible(true);
-            Object value = field.get(source);
+    @JvmStatic
+    @Throws(IllegalAccessException::class)
+    fun copyNonNullProperties(source: Any, target: Any?) {
+        val fields = source.javaClass.getDeclaredFields()
+        for (field in fields) {
+            field.setAccessible(true)
+            val value = field.get(source)
             if (value != null) {
-                field.set(target, value);
+                field.set(target, value)
             }
         }
     }
 
-    public static EntityManagerFactory getEntityManagerFactory() {
-        return emf;
+    fun getEntityManagerFactory(): EntityManagerFactory {
+        return emf!!
     }
 
 
-    public static EntityManager getEntityManager() {
-        return emf.createEntityManager();
+    @JvmStatic
+    fun getEntityManager(): EntityManager? {
+        return emf!!.createEntityManager()
     }
 }

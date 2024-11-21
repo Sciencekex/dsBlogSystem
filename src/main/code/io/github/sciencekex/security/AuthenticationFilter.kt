@@ -44,11 +44,17 @@ class AuthenticationFilter : ContainerRequestFilter {
 
         val token: String = authorizationHeader.removePrefix("Bearer ").trim()
         val id: Int = try {
-            JwtUtil.validateToken(token).toInt()
+            val userId = JwtUtil.validateToken(token)
+            if (userId == null) {
+                containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
+                return
+            }
+            userId.toInt()
         } catch (e: Exception) {
             containerRequestContext.abortWith(Response.status(Response.Status.UNAUTHORIZED).build())
             return
         }
+
 
         containerRequestContext.securityContext = object : SecurityContext {
             override fun getUserPrincipal(): Principal = Principal { id.toString() }
