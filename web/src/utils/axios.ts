@@ -1,6 +1,3 @@
-
-
-
 import axios, { AxiosInstance } from "axios";
 import useAuthStore from "../stores/auth";
 

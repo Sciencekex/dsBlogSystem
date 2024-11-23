@@ -1,4 +1,3 @@
-
 import { create } from "zustand";
 
 
@@ -18,8 +17,8 @@ const useSiteStore = create<SiteState>()(
         },
         isDarkMode: false,
         toggleTheme: () => {
-            set({ isDarkMode: !get().isDarkMode })
-        }
+            set({ isDarkMode: !get().isDarkMode });
+        },
     }),
 );
 

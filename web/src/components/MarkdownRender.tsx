@@ -1,10 +1,8 @@
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import { Typography, Link, Box, Paper } from "@mui/material";
 
-
-import ReactMarkdown from 'react-markdown';
-import remarkGfm from 'remark-gfm';
-import { Typography, Link, Box, Paper } from '@mui/material';
-
-const MarkdownRenderer = ({ markdown }: { markdown: any}) => {
+const MarkdownRenderer = ({ markdown }: { markdown: any }) => {
     return (
         <Paper sx={{ p: 2 }}>
             <ReactMarkdown
@@ -62,8 +60,8 @@ const MarkdownRenderer = ({ markdown }: { markdown: any}) => {
                             sx={{
                                 p: 1,
                                 borderRadius: 1,
-                                overflow: 'auto',
-                                fontFamily: 'monospace',
+                                overflow: "auto",
+                                fontFamily: "monospace",
                             }}
                         >
                             {children}
