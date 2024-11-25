@@ -6,4 +6,5 @@ export interface Comment {
     created_at?: number;
     content?: string;
     user?: User;
+    id?:number;
 }

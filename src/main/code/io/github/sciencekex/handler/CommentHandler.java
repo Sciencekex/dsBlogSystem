@@ -34,7 +34,7 @@ public class CommentHandler {
     @Secured({"user", "admin"})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createComment(Comment comment , @Context SecurityContext securityContext ) {
+    public Response createComment(Comment comment, @Context SecurityContext securityContext) {
         User user = userRepository.findByID(Integer.valueOf(securityContext.getUserPrincipal().getName()));
         comment.setUser(user);
         Article article = articleRepository.findByID(comment.getArticleId());
@@ -46,4 +46,15 @@ public class CommentHandler {
         return Response.status(Response.Status.OK).entity(res).build();
     }
 
+    @DELETE
+    @Path("/{id}")
+    @Secured({"admin"})
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response deleteComment(@PathParam("id") Integer commentId) {
+            commentRepository.delete(commentId);
+            Map<String, Object> res = new HashMap<>();
+            res.put("code", Response.Status.OK.getStatusCode());
+            res.put("message", "Comment deleted successfully");
+            return Response.ok().entity(res).build();
+    }
 }

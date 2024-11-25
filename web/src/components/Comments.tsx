@@ -1,16 +1,24 @@
-
-
-import { Avatar, Box, Button, Card, Divider, Grid2, TextField, Typography } from "@mui/material";
+import { Avatar, Box, Button, Card, Divider, Grid2, Icon, TextField, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { api } from "@/utils/axios.ts";
 import { Comment } from "@/models/comment.ts";
 import useAuthStore from "@/stores/auth.ts";
+import { Delete } from "@mui/icons-material";
 
 
-function MyComment({ comment, firstName, created_at }: {
-    comment?: string; firstName?: string; created_at?: number
+function MyComment({ comment, firstName, created_at ,id}: {
+    comment?: string; firstName?: string; created_at?: number;id:number
 }) {
     const date = new Date(Number(created_at) * 1000);
+
+    function delComment() {
+        api().delete(`comments/${id}`).then(
+            (r) => {
+                console.log(r.data);
+            },
+        );
+    }
+
     return (
         <>
             <Grid2 container sx={{ backgroundColor: "#f0f0f02d" }}>
@@ -24,6 +32,9 @@ function MyComment({ comment, firstName, created_at }: {
                         ) : (<Typography variant="body2" fontStyle="italic">...</Typography>)}
                         <Typography variant="caption">{date.toLocaleString()}</Typography>
                     </Box>
+                    <Button onClick={delComment}>
+                        <Delete />
+                    </Button>
                 </Grid2>
             </Grid2>
         </>
@@ -47,7 +58,7 @@ export default function Comments({ id }: { id: number }) {
 
     useEffect(() => {
         fetchComments();
-    }, []);
+    }, [comments]);
 
     function submitComment() {
         api().post("/comments", {
@@ -88,6 +99,7 @@ export default function Comments({ id }: { id: number }) {
                                 comment={oneOfComments.content}
                                 firstName={oneOfComments.user?.username}
                                 created_at={oneOfComments.created_at}
+                                id={oneOfComments?.id}
                             />
                         );
                     })}
